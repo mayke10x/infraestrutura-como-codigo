@@ -1,0 +1,15 @@
+FROM php:7.4-apache
+
+WORKDIR /var/www/html
+COPY backend/ /var/www/html/
+COPY frontend/ /var/www/html/
+
+RUN apt-get update && apt-get install -y \
+        libfreetype6-dev \
+        libjpeg-62-turbo-dev \
+        libpng-dev \
+    && docker-php-ext-configure gd --with-freetype --with-png \
+    && docker-png-ext-install -j$(nproc) gd \
+    && docker-php-ext-install pdo_mysql
+
+EXPOSE 80
